@@ -2,7 +2,7 @@ class Board
 	# something akin to...
 
 	def initialize
-		@tiles[5][5]
+		@tiles[5][5] = Array.new
 	end
 end
 

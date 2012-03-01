@@ -1,5 +1,5 @@
 # Made by the Eric Wrights (1 & 2)
 
-require 'models/board'
+require "./models/board.rb"
 
 test = Board.new
