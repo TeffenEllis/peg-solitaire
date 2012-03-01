@@ -3,3 +3,5 @@
 require "./models/board.rb"
 
 test = Board.new
+
+print test.board
