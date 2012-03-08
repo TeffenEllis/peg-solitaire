@@ -1,9 +1,16 @@
 class Board
-	def initialize
-		@tiles = Hash.new
-	end
+  attr_accessor :tiles
+  def initialize(size)
+    @tiles = []
+    size.times { |x| @tiles[x] = [] }
+  end
 
-  def print
-    @tiles.each { |t| puts t }
-  ends
+  def render
+    x_axis = ('a'..(@tiles.size + 97).chr)
+    x_axis.each { |l| print " #{l} " }
+
+    @tiles.each do |t| 
+      print " #{t} "
+    end
+  end
 end
