@@ -12,4 +12,3 @@ game_board = Board.new(5)
 
 display.banner
 game_board.render
-binding.pry
