@@ -10,5 +10,13 @@ require 'ap'
 display = Decorator.new
 game_board = Board.new(5)
 
+
 display.banner
 game_board.render
+
+# input = 'y'
+# while input == 'y'
+#   puts "Would you like to play again? (y/n)"
+#   input = gets.chomp!
+# end
+
