@@ -7,12 +7,12 @@ require 'pry'
 require 'colorize'
 require 'ap'
 
-display = Decorator.new
 game_board = Board.new(5)
 
 
-display.banner
+Decorator.banner
 game_board.render
+game_board.move
 
 # input = 'y'
 # while input == 'y'
