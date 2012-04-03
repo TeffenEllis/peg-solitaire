@@ -167,10 +167,10 @@ class Board
       @tiles.size.times do |y|
         # Skip tiles that are empty
         unless @tiles[x][y] == '*'
-          puts "#{x}, #{y} is empty. Skipping."
+          puts "#{x}, #{y} is empty. Skipping." if $DEBUG
           next
         else
-          puts "Checking #{x},#{y}." 
+          puts "Checking #{x},#{y}." if $DEBUG
           # Up
           if (x-1) >= 0
             neighbors_for[x][y] += 1 if @tiles[x-1][y] == '*'
@@ -190,10 +190,12 @@ class Board
           if (y+1) <= (@tiles.size - 1)
             neighbors_for[x][y] += 1 if @tiles[x][y+1] == '*'
           end
-          puts "#{x},#{y} has #{neighbors_for[x][y]} neighbors."
+          puts "#{x},#{y} has #{neighbors_for[x][y]} neighbors." if $DEBUG
         end
       end
     end
-    return false
+    total_neighbors = 0
+    neighbors_for.flatten.each { |n| total_neighbors += n }
+    total_neighbors == 0 ? true : false 
   end
 end

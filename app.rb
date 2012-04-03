@@ -7,6 +7,8 @@ require 'pry'
 require 'colorize'
 require 'ap'
 
+$DEBUG = false
+
 game_board = Board.new(5)
 
 Decorator.clear
