@@ -9,26 +9,29 @@ require 'ap'
 
 $DEBUG = false
 
-game_board = Board.new(5)
+input = 'y'
 
-Decorator.clear
-Decorator.banner
+while input == 'y'
+  game_board = Board.new(5)
 
-game_over = false
-until game_over
-  game_board.render
-  game_board.move
-  game_over = true if game_board.no_neighbors?
-  puts "Next..."
-  gets
   Decorator.clear
-  #game_board.check
+
+  game_over = false
+  until game_over
+    Decorator.banner
+    game_board.render
+    game_board.move
+
+    if game_board.no_neighbors?
+      game_over = true
+      break;
+    end
+
+    Decorator.clear
+  end
+
+  puts "You finished with #{game_board.pieces_left} pieces left!"
+  puts "Would you like to play again? (y/n)"
+  input = gets.chomp!
 end
-
-# input = 'y'
-# while input == 'y'
-#   puts "Would you like to play again? (y/n)"
-#   input = gets.chomp!
-
-# end
 

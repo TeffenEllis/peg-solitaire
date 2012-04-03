@@ -4,9 +4,9 @@ class Decorator
 
   def self.banner
     10.times { print '*' }
-    print " Pegz "
+    print " Pegz ".green
     10.times { print '*' }
-    puts "\n Welcome to the game"
+    puts "\n"
   end
 
   def self.clear

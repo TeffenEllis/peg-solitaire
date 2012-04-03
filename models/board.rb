@@ -2,9 +2,10 @@ require './models/decorator'
 require 'colorize'
 
 class Board
-  attr_accessor :tiles
+  attr_accessor :tiles, :pieces_left
   def initialize(size)
     @tiles = []
+    @pieces_left = size * size - 1
     size.times do |x|
       @tiles[x] = []
     end
@@ -35,30 +36,41 @@ class Board
       i = i+1
       print "#{i.to_s.yellow} |"
       row.each do |square|
-        print "#{square.blue}|"        
+        print "#{square.blue}|"     
       end
 
       # Seperator
       Decorator.border(@tiles.size)
     end
+    puts "Pieces left: #{@pieces_left}"
   end
 
   def move
     puts "What piece would you like to move?"
     print ": "
-    input = gets.chomp!.split ''
+    
+    input = []
+    # Catch empty input.
+    until input != []
+      input = gets.chomp!.split ''
+    end
 
-    # Normalize data
+    # Normalize data.
     input[0] = input[0].ord - 97
     input[1] = input[1].to_i - 1
     start_piece = { x: input[1], y: input[0] }
 
 
-    puts "Where would you like to move (#{input[1]},#{input[0]})?"
+    puts "Where would you like to move (#{input[1] + 1},#{input[0] + 1})?"
     print ": "
-    input = gets.chomp!.split ''
 
-    # Normalize data
+    input = []
+    # Catch empty input.
+    until input != []
+      input = gets.chomp!.split ''
+    end
+
+    # Normalize data.
     input[0] = input[0].ord - 97
     input[1] = input[1].to_i - 1
     end_piece = { x: input[1], y: input[0] }
@@ -147,6 +159,8 @@ class Board
     @tiles[pieces[0][:x]][pieces[0][:y]] = ' '
     @tiles[gamma[:x]][gamma[:y]] = ' '
     @tiles[pieces[1][:x]][pieces[1][:y]] = '*'
+
+    @pieces_left -= 1
 
     return true
   end

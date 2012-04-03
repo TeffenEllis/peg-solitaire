@@ -1,3 +1,4 @@
+# Unused until version 2.
 class Player
   @@count = 0
   attr_accessor :score
