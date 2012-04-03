@@ -56,7 +56,14 @@ class Board
     end
 
     # Normalize data.
-    input[0] = input[0].ord - 97
+    if input[0].ord < 97
+      # Letter is uppercase
+      input[0] = input[0].ord - 65
+    else
+      # Letter is lowercase
+      input[0] = input[0].ord - 97
+    end
+    
     input[1] = input[1].to_i - 1
     start_piece = { x: input[1], y: input[0] }
 
@@ -71,7 +78,13 @@ class Board
     end
 
     # Normalize data.
-    input[0] = input[0].ord - 97
+    if input[0].ord < 97
+      # Letter is uppercase
+      input[0] = input[0].ord - 65
+    else
+      # Letter is lowercase
+      input[0] = input[0].ord - 97
+    end
     input[1] = input[1].to_i - 1
     end_piece = { x: input[1], y: input[0] }
 
