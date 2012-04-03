@@ -159,14 +159,39 @@ class Board
 
     @tiles.size.times do |x|
       @tiles.size.times do |y|
-        # Skip checking any spaces outside of the board.
-        next if (x-1) < 0
-        next if (x+1) > (@tiles.size - 1)
+        neighbors_for[x][y] = 0
+      end
+    end
 
-        next if (y-1) < 0
-        next if (y+1) > (@tiles.size - 1) 
+    @tiles.size.times do |x|
+      @tiles.size.times do |y|
+        # Skip tiles that are empty
+        unless @tiles[x][y] == '*'
+          puts "#{x}, #{y} is empty. Skipping."
+          next
+        else
+          puts "Checking #{x},#{y}." 
+          # Up
+          if (x-1) >= 0
+            neighbors_for[x][y] += 1 if @tiles[x-1][y] == '*'
+          end
 
-        puts "Checking #{x},#{y}."
+          # Down
+          if (x+1) <= (@tiles.size - 1)
+            neighbors_for[x][y] += 1 if @tiles[x+1][y] == '*'
+          end
+
+          # Left
+          if (y-1) >= 0
+            neighbors_for[x][y] += 1 if @tiles[x][y-1] == '*'
+          end
+
+          # Right
+          if (y+1) <= (@tiles.size - 1)
+            neighbors_for[x][y] += 1 if @tiles[x][y+1] == '*'
+          end
+          puts "#{x},#{y} has #{neighbors_for[x][y]} neighbors."
+        end
       end
     end
     return false
