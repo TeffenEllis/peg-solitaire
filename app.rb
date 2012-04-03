@@ -11,10 +11,12 @@ game_board = Board.new(5)
 
 Decorator.clear
 Decorator.banner
-check = false
-until check
+
+game_over = false
+until game_over
   game_board.render
   game_board.move
+  game_over = true if game_board.no_neighbors?
   puts "Next..."
   gets
   Decorator.clear

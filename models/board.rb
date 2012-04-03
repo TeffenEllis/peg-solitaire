@@ -1,4 +1,5 @@
 require './models/decorator'
+require 'colorize'
 
 class Board
   attr_accessor :tiles
@@ -11,32 +12,30 @@ class Board
     # Fill board
     size.times do |x|
       size.times do |y|
-        @tiles[x][y] = ' '
+        @tiles[x][y] = '*'
       end
     end
 
 
     # Remove a random piece
-    # x = rand(5)
-    # y = rand(5)
-    # @tiles[x][y] = ' '
-    @tiles[1][3] = '*'
-    @tiles[1][4] = '*'
+    x = rand(5)
+    y = rand(5)
+    @tiles[x][y] = ' '
 
   end
 
   def render
     print "   "
     x_axis = ('A'..((@tiles.size - 1 ) + 65).chr)
-    x_axis.each { |l| print "#{l} " }
+    x_axis.each { |l| print "#{l.red} " }
 
     Decorator.border(@tiles.size)
 
     @tiles.each_with_index do |row, i|
       i = i+1
-      print "#{i} |"
+      print "#{i.to_s.yellow} |"
       row.each do |square|
-        print "#{square}|"        
+        print "#{square.blue}|"        
       end
 
       # Seperator
@@ -66,11 +65,7 @@ class Board
 
 
     # Check if coords are valid.
-    if valid?(start_piece, end_piece)
-      puts "Success!"
-    else
-      "Bad move."
-    end
+    valid?(start_piece, end_piece)
   end
 
   def valid?(start_piece, end_piece)
@@ -95,7 +90,7 @@ class Board
     end
     # Check if end piece is occupied
     unless @tiles[pieces[1][:x]][pieces[1][:y]] == ' '
-      puts "Your destination of #{pieces[1]} is occupied."
+      puts "Your destination of #{pieces[1]} is occupied or off the board."
       return false 
     end
 
@@ -154,5 +149,26 @@ class Board
     @tiles[pieces[1][:x]][pieces[1][:y]] = '*'
 
     return true
+  end
+
+  def no_neighbors?
+    neighbors_for = []
+    @tiles.size.times do |x|
+      neighbors_for[x] = []
+    end
+
+    @tiles.size.times do |x|
+      @tiles.size.times do |y|
+        # Skip checking any spaces outside of the board.
+        next if (x-1) < 0
+        next if (x+1) > (@tiles.size - 1)
+
+        next if (y-1) < 0
+        next if (y+1) > (@tiles.size - 1) 
+
+        puts "Checking #{x},#{y}."
+      end
+    end
+    return false
   end
 end
