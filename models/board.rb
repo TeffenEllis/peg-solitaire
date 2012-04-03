@@ -15,6 +15,7 @@ class Board
       end
     end
 
+
     # Remove a random piece
     # x = rand(5)
     # y = rand(5)
@@ -66,10 +67,9 @@ class Board
 
     # Check if coords are valid.
     if valid?(start_piece, end_piece)
-      @tiles[start_piece[:x]][start_piece[:y]] = ' '
-      @tiles[end_piece[:x]][end_piece[:y]] = '*'
+      puts "Success!"
     else
-      puts "That move is incorrect."
+      "Bad move."
     end
   end
 
@@ -80,15 +80,24 @@ class Board
       # Check if piece is on the board
       puts piece
       puts @tiles[piece[:x]][piece[:y]]
-      return false unless piece[:x] >= 0 && \
-                          piece[:x] <= @tiles.size && \
-                          piece[:y] >= 0 && \
-                          piece[:y] <= @tiles.size
+      unless piece[:x] >= 0 && \
+             piece[:x] <= @tiles.size && \
+             piece[:y] >= 0 && \
+             piece[:y] <= @tiles.size
+                puts "#{piece} is not on the board!"
+                return false
+      end
     end
     # Check if start piece exists
-    return false unless @tiles[pieces[0][:x]][pieces[0][:y]] == '*'
+    unless @tiles[pieces[0][:x]][pieces[0][:y]] == '*'
+      puts "Your start piece is not at #{pieces[0]}."
+      return false 
+    end
     # Check if end piece is occupied
-    return false unless @tiles[pieces[1][:x]][pieces[1][:y]] == ' '
+    unless @tiles[pieces[1][:x]][pieces[1][:y]] == ' '
+      puts "Your destination of #{pieces[1]} is occupied."
+      return false 
+    end
 
     # Determine direction we're going
 
@@ -113,19 +122,36 @@ class Board
     end
 
     # Check if the move is diagonal
-    return false unless (x_direction.nil? || y_direction.nil?)
-
+    unless (x_direction.nil? || y_direction.nil?)
+      puts "You cannot move diagonally."
+      return false 
+    end
 
 
     # Determine what's underneath us as we jump
     delta = {} # denotes change in two points
     gamma = {} # denotes jumped piece
-    delta[:x] = (pieces[0][:x] - pieces[1][:x])
-    delta[:y] = (pieces[0][:y] - pieces[1][:y])
 
-    gamma[:x] = (pieces[0][:x] + delta[:x])
-    gamma[:y] = (pieces[0][:y] + delta[:y])
+    delta[:x] = -1 if x_direction == :up
+    delta[:x] = 1 if x_direction == :down
+    delta[:x] = 0 if x_direction.nil?
 
+    delta[:y] = -1 if y_direction == :left
+    delta[:y] = 1 if y_direction == :right
+    delta[:y] = 0 if y_direction.nil?
+
+    gamma[:x] = pieces[0][:x] + delta[:x]
+    gamma[:y] = pieces[0][:y] + delta[:y]
+
+    unless @tiles[gamma[:x]][gamma[:y]] == '*'
+      puts "There must be a piece to jump at #{gamma}."
+      return false
+    end
+
+    # If we've come this far, the move is valid.
+    @tiles[pieces[0][:x]][pieces[0][:y]] = ' '
+    @tiles[gamma[:x]][gamma[:y]] = ' '
+    @tiles[pieces[1][:x]][pieces[1][:y]] = '*'
 
     return true
   end
