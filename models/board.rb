@@ -8,15 +8,24 @@ class Board
       @tiles[x] = []
     end
 
+    # Fill board
     size.times do |x|
       size.times do |y|
-        @tiles[x][y] = '*'
+        @tiles[x][y] = ' '
       end
     end
+
+    # Remove a random piece
+    # x = rand(5)
+    # y = rand(5)
+    # @tiles[x][y] = ' '
+    @tiles[1][3] = '*'
+    @tiles[1][4] = '*'
+
   end
 
   def render
-    print "  "
+    print "   "
     x_axis = ('A'..((@tiles.size - 1 ) + 65).chr)
     x_axis.each { |l| print "#{l} " }
 
@@ -36,28 +45,88 @@ class Board
 
   def move
     puts "What piece would you like to move?"
-    print "X: "
-    x = gets.to_i
+    print ": "
+    input = gets.chomp!.split ''
 
-    print "Y: "
-    y = gets.to_i
+    # Normalize data
+    input[0] = input[0].ord - 97
+    input[1] = input[1].to_i - 1
+    start_piece = { x: input[1], y: input[0] }
 
-    puts "Where would you like to move (#{x},#{y})?"
-    print "X: "
-    x_to = gets.to_i
 
-    print "Y: "
-    y_to = gets.to_i
+    puts "Where would you like to move (#{input[1]},#{input[0]})?"
+    print ": "
+    input = gets.chomp!.split ''
 
-    if x <= @tiles.size && y <= @tiles.size && x_to <= @tiles.size && y_to <= @tiles.size
-      unless @tiles[x_to][y_to] == '*'
-        @tiles[x][y] = ' '
-        @tiles[x_to][y_to] = '*'
-      else
-        puts "(#{x_to},#{y_to}) is taken."
-      end
+    # Normalize data
+    input[0] = input[0].ord - 97
+    input[1] = input[1].to_i - 1
+    end_piece = { x: input[1], y: input[0] }
+
+
+    # Check if coords are valid.
+    if valid?(start_piece, end_piece)
+      @tiles[start_piece[:x]][start_piece[:y]] = ' '
+      @tiles[end_piece[:x]][end_piece[:y]] = '*'
     else
-      puts "That move is off the chart!"
+      puts "That move is incorrect."
     end
+  end
+
+  def valid?(start_piece, end_piece)
+    pieces = [start_piece, end_piece]
+
+    pieces.each do |piece|
+      # Check if piece is on the board
+      puts piece
+      puts @tiles[piece[:x]][piece[:y]]
+      return false unless piece[:x] >= 0 && \
+                          piece[:x] <= @tiles.size && \
+                          piece[:y] >= 0 && \
+                          piece[:y] <= @tiles.size
+    end
+    # Check if start piece exists
+    return false unless @tiles[pieces[0][:x]][pieces[0][:y]] == '*'
+    # Check if end piece is occupied
+    return false unless @tiles[pieces[1][:x]][pieces[1][:y]] == ' '
+
+    # Determine direction we're going
+
+    # Up
+    if ((pieces[0][:x] - pieces[1][:x]) > 0)
+      x_direction = :up 
+    # Down
+    elsif ((pieces[0][:x] - pieces[1][:x]) < 0)
+      x_direction = :down 
+    else
+      x_direction = nil
+    end
+
+    # Left
+    if ((pieces[0][:y] - pieces[1][:y]) > 0)
+      y_direction = :left 
+    # Right
+    elsif ((pieces[0][:y] - pieces[1][:y]) < 0) 
+      y_direction = :right
+    else
+      y_direction = nil
+    end
+
+    # Check if the move is diagonal
+    return false unless (x_direction.nil? || y_direction.nil?)
+
+
+
+    # Determine what's underneath us as we jump
+    delta = {} # denotes change in two points
+    gamma = {} # denotes jumped piece
+    delta[:x] = (pieces[0][:x] - pieces[1][:x])
+    delta[:y] = (pieces[0][:y] - pieces[1][:y])
+
+    gamma[:x] = (pieces[0][:x] + delta[:x])
+    gamma[:y] = (pieces[0][:y] + delta[:y])
+
+
+    return true
   end
 end
